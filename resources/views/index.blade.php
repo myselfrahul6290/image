@@ -22,6 +22,17 @@
   .col-5.image{
     width:100%;
    }
+   .hide{
+    display: none;
+   }
+
+   #main-box{
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #E7B10A;
+   }
     </style>
 </head>
 
@@ -30,7 +41,8 @@
 <div class="container">
     <div class="row md-auto">
     
-        <div class="col-6">
+        <div class="col-6" id="main-box">
+          <h2>Image Compression</h2>
     <form method="post" action="{{route('image.comp')}}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
@@ -45,24 +57,50 @@
           <label for="exampleInputPassword1" class="form-label">upload Image</label>
           <input type="file" class="form-control" id="exampleInputPassword1" name="image">
         </div>
-        
         <button type="submit" class="btn btn-primary">upload</button>
       </form>
     </div>
   </div>
+  
   <div class="row">
-    <div class="col-5"> 
-      @if ($message = Session::get('success'))
+    <div class="col-5 px-3"> 
+      @if ($message = Session::get('success1'))
+      <div class="alert alert-success alert-block">
+        <strong>{{$message}}</strong>
+        <button class="btn btn-danger" onclick="comp()">Compress</button>
+      </div>
+      <div class="image col-5">
+        <img src="{{ asset(''.Session::get('image1')) }}" />
+      </div>
+      @endif
+          </div>
+
+        <div class="col-5 px-3" id="compress"> 
+      @if ($message = Session::get('success2'))
             <div class="alert alert-success alert-block">
                 <strong>{{$message}}</strong>
-            </div>
-       <div class="image">
-            <img src="{{ asset(''.Session::get('image')) }}" />
-            </div>
+              </div>
+                <div class="image col-5">
+                  <img src="{{ asset(''.Session::get('image2')) }}" />
+                </div>
+          </div>
         @endif
-        </div>
         </div> 
 </div>
+
+
+<script>
+  //enable compress photo
+  const compress=document.getElementById('compress');
+  compress.classList.add('hide');
+
+  function comp(){
+  compress.classList.remove('hide');
+    
+  }
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

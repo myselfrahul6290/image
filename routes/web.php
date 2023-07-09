@@ -18,6 +18,6 @@ use App\Http\Controllers\ImageController;
 Route::get('image',[ImageController::class, 'index']);
 Route::post('image/compress',[ImageController::class, 'store'])->name('image.comp');
 
-Route::get('image/i1',[ImageController::class, 'show']);
+// Route::get('image/compress/img/{id}',[ImageController::class, 'compress']);
 
 

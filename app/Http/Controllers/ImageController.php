@@ -2,47 +2,57 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\support\Str;
 use Intervention\Image\Facades\Image;
+use App\Models\compressionModel;
 
 class ImageController extends Controller
 {
 
 public function index(){
-    return view('index');
+    $pathStore=compressionModel::all();
+    $data=compact('pathStore');
+    return view('index')->with($data);
 }
 
     public function store(Request $request){
   
         $validatedData = $request->validate([
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-    
-           ]);
+            
+        ]);
+        
+        
            //fetch image from blade file
            $image = $request->file('image');
-           $size=$image->getSize();
-           $size=$size/1000000;
+           $size1=$image->getSize();
+           $size1=$size1/1000000;
 
            // create image name and give dirctory in compress folder 
-          $name='compress/'.time().'.'.$request->image->extension();
-          //open image file
-       $img=Image::make($image->getRealPath());
-       // resize image file
-       $img->resize(600,650);
-       // compress and save
-       $img->save($name,60);
-
-       return back()->with('success', 'Image compress Successfully!'.$size.'mb')
-       ->with('image', $name);
+          $name1='compress/'.time().'upload.'.$request->image->extension();
+          
+          
+          // upload
+          $img1=Image::make($image->getRealPath());
+        //   $img1->resize(600,650);
+          $img1->save($name1);
+          
+          //compress
+          $name2='compress/'.time().'.'.$request->image->extension();
+          $img2=Image::make($image->getRealPath());
+          // $img2->resize(600,650);
+          
+          $img2->save($name2,60);
+          
+          //get size after comprssion
+          $size2=$img2->filesize();
+          $size2=$size2/1000000;
+   
+  
+       return back()->with(['success1'=>'Image uploaded Successfully! and size=>'.$size1.'mb',
+       'success2'=>'Image compresed Successfully!and size=>'.$size2.'mb',
+       ])
+       ->with(['image1'=>$name1, 'image2'=>$name2]);
     }
 
-    // public function show($size){
-        
-
-    //     return response()->json([
-    //         'name' => $size,
-    //         'state' => 'CA',
-    //     ]);
-    // }
 }
 
